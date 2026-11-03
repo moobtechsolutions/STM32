@@ -60,8 +60,8 @@ all: main-build
 main-build: Teste-Nucleo-F401RE.elf secondary-outputs
 
 # Tool invocations
-Teste-Nucleo-F401RE.elf Teste-Nucleo-F401RE.map: $(OBJS) $(USER_OBJS) C:\Users\USUARIO\STM32CubeIDE\workspace_2.2.0\Teste-Nucleo-F401RE\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Teste-Nucleo-F401RE.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\USUARIO\STM32CubeIDE\workspace_2.2.0\Teste-Nucleo-F401RE\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Teste-Nucleo-F401RE.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Teste-Nucleo-F401RE.elf Teste-Nucleo-F401RE.map: $(OBJS) $(USER_OBJS) C:\Users\USUARIO\Documents\GitHub\STM32\Teste-Nucleo-F401RE\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Teste-Nucleo-F401RE.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\USUARIO\Documents\GitHub\STM32\Teste-Nucleo-F401RE\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Teste-Nucleo-F401RE.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
