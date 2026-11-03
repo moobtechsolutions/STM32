@@ -104,6 +104,9 @@ int main(void)
 	  HAL_Delay(500);
 
 	  //comentario teste GIT nativo do eclips
+
+
+	  //teste
   }
   /* USER CODE END 3 */
 }
