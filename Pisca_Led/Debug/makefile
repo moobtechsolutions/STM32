@@ -60,8 +60,8 @@ all: main-build
 main-build: Pisca_Led.elf secondary-outputs
 
 # Tool invocations
-Pisca_Led.elf Pisca_Led.map: $(OBJS) $(USER_OBJS) C:\Users\USUARIO\Documents\GitHub\STM32\Pisca_Led\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Pisca_Led.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\USUARIO\Documents\GitHub\STM32\Pisca_Led\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Pisca_Led.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Pisca_Led.elf Pisca_Led.map: $(OBJS) $(USER_OBJS) E:\STM32CubeID\STM32\Pisca_Led\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Pisca_Led.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\STM32CubeID\STM32\Pisca_Led\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Pisca_Led.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
