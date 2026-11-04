@@ -56,7 +56,7 @@ static void MX_USART2_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-   int contador = 50; // Variável globa
+   int contador = 100; // Variável globa
 /* USER CODE END 0 */
 
 /**
@@ -100,14 +100,30 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+	  //Led da propria NUCLEO
 	  HAL_GPIO_TogglePin(GPIOA, LD2_Pin);
-	  HAL_Delay(contador);
+	      HAL_Delay(contador);
 
-	  HAL_GPIO_TogglePin(GPIOC, LedFora_Pin);
-	  HAL_Delay(contador);
+	  //Led Vermelhor PC1
+	  HAL_GPIO_TogglePin(GPIOC, LedVermelho_Pin);
+	  	  HAL_Delay(contador);
 
-	  HAL_GPIO_TogglePin(GPIOA, LedFora_02_Pin);
-	  HAL_Delay(contador);
+	  //Led Verde PC0
+	  HAL_GPIO_TogglePin(GPIOC, LedVerde_Pin);
+	  	  HAL_Delay(contador);
+
+	  //Led Azul PA0
+	  HAL_GPIO_TogglePin(GPIOA, LedAzul_Pin);
+	      HAL_Delay(contador);
+
+      //Led Amarelo PA1
+      HAL_GPIO_TogglePin(GPIOA, LedAmarelo_Pin);
+      	  HAL_Delay(contador);
+
+      //Led Branco PB1
+      HAL_GPIO_TogglePin(GPIOB, LedBranco_Pin);
+      	  HAL_Delay(contador);
 
 
   }
@@ -212,10 +228,13 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LedFora_GPIO_Port, LedFora_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, LedVerde_Pin|LedVermelho_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LedFora_02_Pin|LD2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LedAzul_Pin|LedAmarelo_Pin|LD2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LedBranco_GPIO_Port, LedBranco_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -223,19 +242,26 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LedFora_Pin */
-  GPIO_InitStruct.Pin = LedFora_Pin;
+  /*Configure GPIO pins : LedVerde_Pin LedVermelho_Pin */
+  GPIO_InitStruct.Pin = LedVerde_Pin|LedVermelho_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LedFora_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LedFora_02_Pin LD2_Pin */
-  GPIO_InitStruct.Pin = LedFora_02_Pin|LD2_Pin;
+  /*Configure GPIO pins : LedAzul_Pin LedAmarelo_Pin LD2_Pin */
+  GPIO_InitStruct.Pin = LedAzul_Pin|LedAmarelo_Pin|LD2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : LedBranco_Pin */
+  GPIO_InitStruct.Pin = LedBranco_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LedBranco_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
