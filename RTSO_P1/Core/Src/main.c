@@ -41,6 +41,8 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+
 UART_HandleTypeDef huart2;
 
 /* Definitions for RTOS_LedAzul */
@@ -55,14 +57,35 @@ osThreadId_t RTOS_LedVermelhHandle;
 const osThreadAttr_t RTOS_LedVermelh_attributes = {
   .name = "RTOS_LedVermelh",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for RTOS_LedVerde */
 osThreadId_t RTOS_LedVerdeHandle;
 const osThreadAttr_t RTOS_LedVerde_attributes = {
   .name = "RTOS_LedVerde",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for RTOS_LedAmarelo */
+osThreadId_t RTOS_LedAmareloHandle;
+const osThreadAttr_t RTOS_LedAmarelo_attributes = {
+  .name = "RTOS_LedAmarelo",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for RTOS_LedBranco */
+osThreadId_t RTOS_LedBrancoHandle;
+const osThreadAttr_t RTOS_LedBranco_attributes = {
+  .name = "RTOS_LedBranco",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for Task_POT */
+osThreadId_t Task_POTHandle;
+const osThreadAttr_t Task_POT_attributes = {
+  .name = "Task_POT",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* USER CODE BEGIN PV */
 
@@ -72,9 +95,13 @@ const osThreadAttr_t RTOS_LedVerde_attributes = {
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_ADC1_Init(void);
 void StartRTOS_LedAzul(void *argument);
 void StartRTOS_LedVermelho(void *argument);
 void StartRTOS_LedVerde(void *argument);
+void StartRTOS_LedAmarelo(void *argument);
+void StartRTOS_LedBranco(void *argument);
+void StartTaskPOT(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -82,6 +109,7 @@ void StartRTOS_LedVerde(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+uint16_t readValue = 100;
 
 /* USER CODE END 0 */
 
@@ -115,6 +143,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -147,6 +176,15 @@ int main(void)
 
   /* creation of RTOS_LedVerde */
   RTOS_LedVerdeHandle = osThreadNew(StartRTOS_LedVerde, NULL, &RTOS_LedVerde_attributes);
+
+  /* creation of RTOS_LedAmarelo */
+  RTOS_LedAmareloHandle = osThreadNew(StartRTOS_LedAmarelo, NULL, &RTOS_LedAmarelo_attributes);
+
+  /* creation of RTOS_LedBranco */
+  RTOS_LedBrancoHandle = osThreadNew(StartRTOS_LedBranco, NULL, &RTOS_LedBranco_attributes);
+
+  /* creation of Task_POT */
+  Task_POTHandle = osThreadNew(StartTaskPOT, NULL, &Task_POT_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -224,6 +262,58 @@ void SystemClock_Config(void)
 }
 
 /**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_4;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
+}
+
+/**
   * @brief USART2 Initialization Function
   * @param None
   * @retval None
@@ -278,7 +368,10 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, LED_Verde_Pin|LED_Vermelho_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED_Azul_Pin|LD2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED_Azul_Pin|LED_Amarelo_Pin|LD2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LED_Branco_GPIO_Port, LED_Branco_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -293,12 +386,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LED_Azul_Pin LD2_Pin */
-  GPIO_InitStruct.Pin = LED_Azul_Pin|LD2_Pin;
+  /*Configure GPIO pins : LED_Azul_Pin LED_Amarelo_Pin LD2_Pin */
+  GPIO_InitStruct.Pin = LED_Azul_Pin|LED_Amarelo_Pin|LD2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : LED_Branco_Pin */
+  GPIO_InitStruct.Pin = LED_Branco_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LED_Branco_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
@@ -326,7 +426,7 @@ void StartRTOS_LedAzul(void *argument)
 
 	//Led azul padrão placa nucleo porta A LD2_Pin
 	HAL_GPIO_TogglePin(GPIOA, LED_Azul_Pin);
-	osDelay(1000);
+	osDelay(readValue+20);
 
   }
   /* USER CODE END 5 */
@@ -346,7 +446,7 @@ void StartRTOS_LedVermelho(void *argument)
   for(;;)
   {
 		HAL_GPIO_TogglePin(GPIOC, LED_Vermelho_Pin);
-			osDelay(500);
+			osDelay(readValue+40);
   }
   /* USER CODE END StartRTOS_LedVermelho */
 }
@@ -365,9 +465,81 @@ void StartRTOS_LedVerde(void *argument)
   for(;;)
   {
 	  HAL_GPIO_TogglePin(GPIOC, LED_Verde_Pin);
-    osDelay(1500);
+    osDelay(readValue+60);
   }
   /* USER CODE END StartRTOS_LedVerde */
+}
+
+/* USER CODE BEGIN Header_StartRTOS_LedAmarelo */
+/**
+* @brief Function implementing the RTOS_LedAmarelo thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartRTOS_LedAmarelo */
+void StartRTOS_LedAmarelo(void *argument)
+{
+  /* USER CODE BEGIN StartRTOS_LedAmarelo */
+  /* Infinite loop */
+  for(;;)
+  {
+	  HAL_GPIO_TogglePin(GPIOA, LED_Amarelo_Pin);
+    osDelay(readValue+80);
+  }
+  /* USER CODE END StartRTOS_LedAmarelo */
+}
+
+/* USER CODE BEGIN Header_StartRTOS_LedBranco */
+/**
+* @brief Function implementing the RTOS_LedBranco thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartRTOS_LedBranco */
+void StartRTOS_LedBranco(void *argument)
+{
+  /* USER CODE BEGIN StartRTOS_LedBranco */
+  /* Infinite loop */
+  for(;;)
+  {
+	  HAL_GPIO_TogglePin(GPIOB, LED_Branco_Pin);
+    osDelay(readValue+100);
+  }
+  /* USER CODE END StartRTOS_LedBranco */
+}
+
+/* USER CODE BEGIN Header_StartTaskPOT */
+/**
+* @brief Function implementing the Task_POT thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTaskPOT */
+void StartTaskPOT(void *argument)
+{
+  /* USER CODE BEGIN StartTaskPOT */
+  /* Infinite loop */
+  for(;;)
+  {
+	  //inicializa o ADC
+		  HAL_ADC_Start(&hadc1);
+
+		  //converter o ADC por 1000 não sei ainda o que faz
+		  HAL_ADC_PollForConversion(&hadc1, 100);
+
+		  //pega valor lido em ADC e joga na variavel readValue
+		  readValue = HAL_ADC_GetValue(&hadc1);
+
+		  //stopa para do ADC
+		  HAL_ADC_Stop(&hadc1);
+
+
+		  HAL_GPIO_TogglePin(GPIOA, LD2_Pin);
+
+		  osDelay(readValue);
+
+  }
+  /* USER CODE END StartTaskPOT */
 }
 
 /**
