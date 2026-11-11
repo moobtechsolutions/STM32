@@ -1,9 +1,9 @@
 ../Core/Src/main.c:73:5:main	16	static
-../Core/Src/main.c:222:10:Executar_SoftStart_PushPull_50PercentTIM3	48	static
-../Core/Src/main.c:292:6:SystemClock_Config	88	static
-../Core/Src/main.c:339:13:MX_TIM1_Init	96	static
-../Core/Src/main.c:420:13:MX_TIM2_Init	64	static
-../Core/Src/main.c:485:13:MX_TIM3_Init	64	static
-../Core/Src/main.c:550:13:MX_USART2_UART_Init	8	static
-../Core/Src/main.c:583:13:MX_GPIO_Init	48	static
-../Core/Src/main.c:625:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:184:8:Executar_SoftStart_PushPull_50PercentTIM2	48	static
+../Core/Src/main.c:302:6:SystemClock_Config	88	static
+../Core/Src/main.c:349:13:MX_TIM1_Init	96	static
+../Core/Src/main.c:430:13:MX_TIM2_Init	64	static
+../Core/Src/main.c:495:13:MX_TIM3_Init	64	static
+../Core/Src/main.c:560:13:MX_USART2_UART_Init	8	static
+../Core/Src/main.c:593:13:MX_GPIO_Init	48	static
+../Core/Src/main.c:635:6:Error_Handler	4	static,ignoring_inline_asm

@@ -60,8 +60,8 @@ all: main-build
 main-build: PWM_Tentativa_03_Complementar.elf secondary-outputs
 
 # Tool invocations
-PWM_Tentativa_03_Complementar.elf PWM_Tentativa_03_Complementar.map: $(OBJS) $(USER_OBJS) E:\STM32CubeID\PWM_Tentativa_03_Complementar\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "PWM_Tentativa_03_Complementar.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\STM32CubeID\PWM_Tentativa_03_Complementar\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PWM_Tentativa_03_Complementar.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+PWM_Tentativa_03_Complementar.elf PWM_Tentativa_03_Complementar.map: $(OBJS) $(USER_OBJS) C:\Users\USUARIO\Documents\GitHub\STM32\PWM_Tentativa_03_Complementar\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "PWM_Tentativa_03_Complementar.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\USUARIO\Documents\GitHub\STM32\PWM_Tentativa_03_Complementar\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PWM_Tentativa_03_Complementar.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

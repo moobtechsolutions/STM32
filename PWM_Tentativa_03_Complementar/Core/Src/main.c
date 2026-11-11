@@ -108,8 +108,8 @@ int main(void)
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
 
   //inicializar os timer 02 e os canais 1 e 2
-  // Pinos de saida Chanel 1 = PA0
-  // Pinos de saida Chanel 2 = PA1
+  // Pinos de saida Chanel 1 = PA0   ->Led Azul
+  // Pinos de saida Chanel 2 = PA1   ->Led Amarelo
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
 
@@ -124,12 +124,17 @@ int main(void)
   /* Certifique-se de que a instância do timer está declarada (geralmente htim1 ou htim8) */
   extern TIM_HandleTypeDef htim1;
 
+  extern TIM_HandleTypeDef htim2;
+
+  extern TIM_HandleTypeDef htim3;
   /**
     * @brief  Executa a partida suave (Soft-Start) para a topologia Push-Pull.
     * @note   ARR = 2000. Alvo final de 50% de Duty Cycle.
     * @param  passos: Quantos incrementos a rampa terá até atingir o valor final.
     * @param  atraso_ms: Tempo de espera em milissegundos entre cada passo da rampa.
     */
+
+  //Executa o PushPull di TIM1
   void Executar_SoftStart_PushPull_50PercentTIM1(uint16_t passos, uint32_t atraso_ms)
   {
       // Valores Iniciais solicitados
@@ -175,6 +180,7 @@ int main(void)
   }
 
 
+  //Executa o PushPull di TIM2
   void Executar_SoftStart_PushPull_50PercentTIM2(uint16_t passos, uint32_t atraso_ms)
     {
         // Valores Iniciais solicitados
@@ -219,6 +225,8 @@ int main(void)
         __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, alvo_B);
     }
 
+
+    //Executa o PushPull di TIM1
     void Executar_SoftStart_PushPull_50PercentTIM3(uint16_t passos, uint32_t atraso_ms)
     {
         // Valores Iniciais solicitados
@@ -263,11 +271,13 @@ int main(void)
         __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, alvo_B);
     }                              //primeiro paramento é a divissão do passo por 400 exempo
                                    //segundo paramentro é daley igual al Hal_Delay 50
-  //Executar_SoftStart_PushPull_50PercentTIM1(400, 10);
 
-  //Executar_SoftStart_PushPull_50PercentTIM2(400, 50);
 
-  Executar_SoftStart_PushPull_50PercentTIM3(400, 10);
+    //Executar_SoftStart_PushPull_50PercentTIM1(400, 10);
+
+  Executar_SoftStart_PushPull_50PercentTIM2(400, 50);
+
+  //Executar_SoftStart_PushPull_50PercentTIM3(400, 10);
   /* USER CODE END 2 */
 
   /* Infinite loop */
